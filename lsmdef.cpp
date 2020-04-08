@@ -76,6 +76,7 @@ void lsmtree::_emptying_buffer(){
 
 void lsmtree::_write_to_file(){
 	cout<<"buffer full need to write"<<endl;
+	filling_buffer_pointer=0;
 }
 
 void lsmtree::_update_priority(lsmnode* node){
@@ -88,7 +89,7 @@ bool lsmtree::_insert(_key key, _value value){
 	lsmnode *trav = this->root;
 	lsmnode *p_trav = NULL;
 
-	if(root == NULL){
+	if(root == NULL || root->deleted == true){
 		root = new lsmnode;
 		root->key = key;
 		root->value = value;
@@ -110,28 +111,29 @@ bool lsmtree::_insert(_key key, _value value){
 		}else if(trav->key > key){
 			trav->l_weight++;
 			p_trav = trav;
-			if(trav->l == NULL) trav->l = new lsmnode;
+			if(trav->l == NULL || trav->l->deleted == true) trav->l = new lsmnode;
 			trav = trav->l;
 		}else{
 			trav->r_weight++;
 			p_trav = trav;
-			if(trav->r == NULL) trav->r = new lsmnode;
+			if(trav->r == NULL || trav->r->deleted == true) trav->r = new lsmnode;
 			trav = trav->r;
 		}
 	}
 }
 
 
-bool lsmtree::_delete(_key key){
-	if(!_peek_bloom_filter(key)) return false;
+int lsmtree::_delete(_key key){
+	if(!_peek_bloom_filter(key)) return -1;
 	lsmnode *trav = this->root;
 	while(true){
-		if(trav == NULL) return false;
+		if(trav == NULL) return 0;
 		if(trav->key == key){
-			trav->deleted = false;
+			if(trav->deleted == true) return 0;
+			trav->deleted = true;
 			emptying_buffer[trav->index] = NULL;
 			node_count--;
-			return true;
+			return 1;
 		}else if(trav->key > key){
 			trav = trav->l;
 		}else{

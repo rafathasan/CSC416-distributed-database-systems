@@ -11,7 +11,7 @@ An LSM Tree based key-value store (Single Thread)
  ## Brief Explaination
  A non-balancing AVL Tree is used for the LSM Tree with a priority queue and a bloom filter. Priority queue let emptying buffer to pop out the most infrequent node from the LSM Tree. When the filling buffer gets full, it sorts the node and writes to the disk.
  
-Bloom Filter: delete, update and find check for bloom filter status.
+Bloom Filter: delete, update and find check for bloom filter status. And the insert updates the bloom filter.
 
 Priority queue(emptying buffer): It updates each node priority on update, find and insert operations.
 

@@ -14,6 +14,7 @@ void lsm_shell(lsmtree*);
 void _warning(char*);
 void _message(char*);
 void _message(_value);
+void _man();
 lsmtree* _parse_argv(int, char* []);
 int main(int argc, char* argv[]){
 
@@ -141,10 +142,25 @@ void lsm_shell(lsmtree *tree){
 			cout<<"Logical Pairs: "<<tree->node_count<<endl;
 		}
 		else if( !word.compare("") );
-		else cout<<"others"<<endl;
+		else _man();
 		time_stop();
 		time_print();
 	}
+}
+
+void _man(){
+	char *FILE = "manual";
+	ifstream ifs;
+	ifs.open(FILE, ios::in|ios::binary);
+	if(!ifs.is_open()){
+		cout<<"Manual file is missing ! FILE: "<<FILE<<endl;
+		return;
+	};
+	char ch;
+	while(ifs.get(ch)){
+		cout<<ch;
+	}
+	ifs.close();
 }
 
 void _warning(char *msg){

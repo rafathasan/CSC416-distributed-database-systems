@@ -8,9 +8,6 @@ An LSM Tree based key-value store (Single Thread)
  
  lsmtree.cpp - the interactive shell implementation.
  
- ## makefile
- ......
- 
  ## Disk Storage Structure
  
  

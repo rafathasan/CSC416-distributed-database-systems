@@ -1,7 +1,7 @@
 # lsm-tree
 An LSM Tree based key-value store (Single Thread)
 
-## File Structure
+## Files
  lsmdef.h - contains necessary prototypes, type definition and data structures.
  
  lsmdef.cpp - the lsm core implementation.

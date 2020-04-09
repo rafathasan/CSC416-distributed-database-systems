@@ -7,6 +7,8 @@
 
 #include <stddef.h>
 #include <iostream>
+#include <fstream>
+#include <algorithm>
 #include "lsmdef.h"
 using namespace std;
 
@@ -45,6 +47,17 @@ lsmtree::_lsmtree(){
 	int i;while(i<__BLOOM_FILTER_SIZE__){bloom_filter[i++] = false;}
 }
 
+lsmtree::_lsmtree(_num buffer_size, _num tree_size, _num bloom_size){
+	root = NULL;
+	emptying_buffer = new lsmnode*[tree_size];
+	filling_buffer = new lsmnode*[buffer_size];
+	bloom_filter = new bool[bloom_size];
+	emptying_buffer_pointer = 0;
+	filling_buffer_pointer = 0;
+	node_count = 0;
+	int i;while(i<bloom_size){bloom_filter[i++] = false;}
+}
+
 _key hash_func1(_key key){
 	return (key % __BLOOM_FILTER_SIZE__);
 }
@@ -75,7 +88,9 @@ void lsmtree::_emptying_buffer(){
 }
 
 void lsmtree::_write_to_file(){
-	cout<<"buffer full need to write"<<endl;
+	disk ds;
+	ds._merge_sort(filling_buffer, filling_buffer_pointer+1);
+	ds._write_buffer_to_disk(filling_buffer, filling_buffer_pointer+1);
 	filling_buffer_pointer=0;
 }
 
@@ -175,4 +190,37 @@ _value lsmtree::_find(_key key){
 			trav = trav->r;
 		}
 	}
+}
+
+char* __FILE_NAME__ = "logfile";
+
+_disk::_disk() {
+	FILE = __FILE_NAME__;
+}
+
+
+bool comp(lsmnode *l, lsmnode *r){
+	return l->key < r->key;
+}
+
+void _disk::_merge_sort(lsmnode** buffer, _num size) {
+	sort(buffer, buffer+size, comp);
+}
+
+void _disk::_write_buffer_to_disk(lsmnode** buffer, _num size) {
+	fstream fs;
+	fs.open(FILE, ios::binary|ios::out|ios::ate);
+	for(int i=0;i<size;i++){
+		fs.write((char*) &buffer[i], sizeof(lsmnode));
+	}
+
+	inode node;
+	node.blocks_key[0] = buffer[0]->key;
+
+	map m;
+	m.pos[0] = fs.tellg();
+
+	fs.write((char*)&node, sizeof(inode));
+	fs.write((char*)&m, sizeof(map));
+	fs.close();
 }

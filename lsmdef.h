@@ -29,10 +29,6 @@ typedef struct _lsmnode{
 } lsmnode;
 
 
-typedef struct __disk__{
-
-} disk;
-
 
 typedef struct _lsmtree{
 	lsmnode *root;
@@ -43,15 +39,32 @@ typedef struct _lsmtree{
 	_num filling_buffer_pointer;
 	_num node_count;
 	_lsmtree();
+	_lsmtree(_num, _num, _num);
 	bool _peek_bloom_filter(_key);
 	void _update_bloom_filter(_key);
-	void _delete_node(lsmnode*);
 	void _write_to_file();
 	void _emptying_buffer();
 	void _update_priority(lsmnode*);
 	bool _insert(_key, _value);
-	bool _delete(_key);
+	int _delete(_key);
 	bool _update(_key, _value);
 	_value _find(_key);
 } lsmtree;
+
+
+struct map{
+	unsigned int pos[255] = {0};
+};
+
+struct inode{
+	_key blocks_key[255] = {0};
+};
+
+typedef struct _disk{
+	char* FILE;
+	_disk();
+	void _merge_sort(lsmnode**,_num);
+	void _write_buffer_to_disk(lsmnode**, _num);
+	friend lsmtree;
+} disk;
 #endif /* LSMTREE_H_ */

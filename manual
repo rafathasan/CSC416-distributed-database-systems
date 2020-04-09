@@ -1,0 +1,10 @@
+usage: lsmtree# [OPTION] INT...
+or: lsmtree# [OPTION] SOURCE
+
+Options:
+	p KEY VALUE	The put command will insert a key-value pair int the LSM-Tree.
+	g KEY		The get command takes a single integer, the key, and returns the current value associated with that key.
+	r KEY KEY	The range command works in a similar way to get but looks for a sequence of keys rather than a single point.
+	d KEY		The delete command will remove a single key-value pair from the LSM-Tree.
+	l SOURCE	The load command is included as a way to insert many values into the tree without the need to read and parse individual ascii lines.
+	s		The stats command is a command that allows the caller to view some information about the current state of the tree.

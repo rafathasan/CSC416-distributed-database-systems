@@ -10,3 +10,8 @@ An LSM Tree based key-value store (Single Thread)
  
  ## makefile
  ......
+ 
+ ## Disk Storage Structure
+ 
+ 
+ <img src="https://github.com/rafathasan/lsm-tree/raw/master/readme_src/logfile.png" />

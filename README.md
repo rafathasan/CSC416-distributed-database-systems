@@ -1,7 +1,7 @@
 # CSC 416: Distributed Database Systems
 
-### Project Topic
-An LSM Tree based key-value store (Single Thread)
+### Project Topic: An LSM Tree based key-value store
+LSM trees maintain key-value pairs and store data in two or more separate structures, each of which is optimized for its respective underlying storage medium. Data is synchronized between the two structures efficiently, in batches.
 
 **Files**
 
